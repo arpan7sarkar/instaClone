@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: [true, "Image is required"],
     },
-    owner: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: [true, "Owner is required"],
