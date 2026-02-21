@@ -15,8 +15,8 @@ const register = async (req, res) => {
         }
         const isUserAlreadyExist = await userModel.findOne({
             $or: [
-                { email },
-                { username }
+                { normalizedEmail },
+                { normalizedUsername }
             ]
         })
         if (isUserAlreadyExist) {
@@ -70,7 +70,8 @@ const login = async (req, res) => {
     
     try {
         const {username , email, password} = req.body;
-
+        const normalizedEmail = email.toLowerCase();
+        const normalizedUsername = username.toLowerCase();
         if((!username && !email) || !password){
             return res.status(400).json({
                 success: false,
@@ -80,8 +81,8 @@ const login = async (req, res) => {
 
         const user = await userModel.findOne({
             $or: [
-                { email },
-                { username }
+                { normalizedEmail },
+                { normalizedUsername }
             ]
         })
         if(!user){
