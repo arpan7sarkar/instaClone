@@ -21,3 +21,14 @@ Features
 *   Followers
 *   Following
 
+
+
+#### UserSchema
+user = {
+    username : String ,
+    email: String , unique,
+    password : String ,
+    bio:String ,
+    profile_image:String ,
+    followers
+}
