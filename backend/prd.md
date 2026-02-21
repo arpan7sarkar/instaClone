@@ -29,6 +29,14 @@ user = {
     email: String , unique,
     password : String ,
     bio:String ,
-    profile_image:String ,
+    profileImage:String ,
     followers
+}
+
+#### PostSchema
+post = {
+    caption:String,
+    imageUrl:String,
+    user:userId,
+    createdAt:Date-time
 }
