@@ -6,9 +6,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 const isVerfied = require("../middlewares/isVerified")
 
 postRouter.post("/", isVerfied ,upload.single("file") ,postController.createPostController);
+postRouter.get("/", isVerfied ,postController.getUserPostController);
+postRouter.get("/details/:id", isVerfied ,postController.getUserPostDetailsController);
 
-// postRouter.get("/", postController.getAllPostController);
-// postRouter.get("/:id", postController.getPostByIdController);
 // postRouter.put("/:id", postController.updatePostByIdController);
 // postRouter.delete("/:id", postController.deletePostByIdController);
 

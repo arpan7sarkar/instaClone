@@ -29,4 +29,32 @@ const createPostController = async (req, res) => {
     }
 }
 
-module.exports = { createPostController }
+const getUserPostController = async (req, res) => {
+    try {
+        const posts = await postModel.find({userId: req.userId});
+        res.status(200).json({success: true, message: "Posts fetched successfully", posts});
+    } catch (error) {
+        return res.status(500).json({success: false, message: "Something went wrong"});
+    }
+}
+
+const getUserPostDetailsController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await postModel.findById(id);
+        if(!post){
+            return res.status(404).json({success: false, message: "Post not found"});
+        }
+        if(post.userId.toString() !== req.userId){
+            return res.status(401).json({success: false, message: "Unauthorized"});
+        }
+        res.status(200).json({success: true, message: "Post fetched successfully", post});
+    } catch (error) {
+        console.log(error);
+        
+        return res.status(500).json({success: false, message: "Something went wrong"});
+    }
+}
+
+
+module.exports = { createPostController , getUserPostController , getUserPostDetailsController}
