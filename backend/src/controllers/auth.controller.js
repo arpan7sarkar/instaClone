@@ -48,11 +48,11 @@ const register = async (req, res) => {
         res.status(201).json({
             success: true,
             message: "User created successfully",
-            user:{
-                username:user.username,
-                email:user.email,
-                bio:user.bio,
-                profileImage:user.profileImage
+            user: {
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                profileImage: user.profileImage
             }
         })
     } catch (error) {
@@ -67,12 +67,12 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    
+
     try {
-        const {username , email, password} = req.body;
-        const normalizedEmail = email.toLowerCase();
-        const normalizedUsername = username.toLowerCase();
-        if((!username && !email) || !password){
+        const { username, email, password } = req.body;
+        const normalizedEmail = email ? email.toLowerCase() : null;
+        const normalizedUsername = username ? username.toLowerCase() : null;
+        if ((!username && !email) || !password) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -81,19 +81,19 @@ const login = async (req, res) => {
 
         const user = await userModel.findOne({
             $or: [
-                { normalizedEmail },
-                { normalizedUsername }
+                { email: normalizedEmail },
+                { username: normalizedUsername }
             ]
         })
-        if(!user){
+        if (!user) {
             return res.status(404).json({
                 success: false,
-                message: "User not found"
+                message: "Invalid credentials"
             })
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if(!isPasswordValid){
+        if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
                 message: "Invalid credentials"
@@ -109,18 +109,20 @@ const login = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "User logged in successfully",
-            user:{
-                username:user.username,
-                email:user.email,
-                bio:user.bio,
-                profileImage:user.profileImage
+            user: {
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                profileImage: user.profileImage
             }
         })
     } catch (error) {
-        res.status(500),json({
+        console.log(error.message);
+        
+        res.status(500).json({
             success: false,
-            message: error.message
-        })
+            message: "Internal server error"
+        });
     }
 }
-module.exports = { register , login }
+module.exports = { register, login }
